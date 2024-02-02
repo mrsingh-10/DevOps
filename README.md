@@ -1,6 +1,6 @@
 # AWS
 
-This repository contains aws and DevOps projects
+This is a Work-In-Progress Repo for aws and DevOps projects
 
 [TODOs]
 - Add descrition of this repo
