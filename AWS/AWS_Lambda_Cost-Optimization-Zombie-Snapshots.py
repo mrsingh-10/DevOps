@@ -1,26 +1,22 @@
+###########################################################################
+# Author: hsingh
+# Version: v1
+#
+# Descritpion: This application is a part of the cost optimization project.
+#    This functions check if there are any Zombie snapshots, i.e. snapshots 
+#    that are not attached to any volume or if they are it check if the
+#    attached volume is in use or not.
+#
+#    This is a boiler-plate code, and from this you can add more functionalities
+#    depending on the requirements, like moving the snapshots to S3 Glacier, 
+#    add allerting with Email or Slack instead of just Deleting.
+#
+# To use this application:
+#    This can be added as a Lambda function and can be trieggered from CloudWatch 
+#    by just simply scheduling a CronJob.
+###########################################################################
+
 import boto3
-import json
-
-# client = boto3.client('ec2')
-
-# response = client.describe_volumes()
-# s=0
-# for vol in response["Volumes"]:
-#     s+=vol["Size"]
-#     print(vol["Size"])
-
-# print("Tot size:",s)
-
-# Get all active EC2 instance IDs not needed
-# instances_response = ec2.describe_instances(Filters=[{'Name': 'instance-state-name', 'Values': ['running']}])
-# active_instance_ids = set()
-
-# for reservation in instances_response['Reservations']:
-#     for instance in reservation['Instances']:
-#         active_instance_ids.add(instance['InstanceId'])
-
-# if len(active_instance_ids) > 0:
-#     print("active_instance_ids:",active_instance_ids)
 
 DELETE = False
 # OR MOVE TO S3 Glacier
@@ -80,3 +76,16 @@ def lambda_handler(event, context):
     status = f"Snapshot Deleted: {tot_snapshots_deleted},\nSnapshot need to be Deleted: {tot_snapshots_to_delete},\nTot Snapshots: {tot_snapshots}."
     print(status)
 lambda_handler(None,None)
+
+# Additional check could be added by checking that the mounted volumes are from active instances only:
+#
+# Get all active EC2 instance IDs not needed
+# instances_response = ec2.describe_instances(Filters=[{'Name': 'instance-state-name', 'Values': ['running']}])
+# active_instance_ids = set()
+
+# for reservation in instances_response['Reservations']:
+#     for instance in reservation['Instances']:
+#         active_instance_ids.add(instance['InstanceId'])
+
+# if len(active_instance_ids) > 0:
+#     print("active_instance_ids:",active_instance_ids)
