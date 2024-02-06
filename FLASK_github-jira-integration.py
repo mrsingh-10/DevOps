@@ -1,11 +1,33 @@
-# This code sample uses the 'requests' library:
-# http://docs.python-requests.org
+###########################################################################
+# Author: hsingh
+# Version: v1
+#
+# Descritpion: This application works as a backend api for a GitHub webhook.
+#    When the webhook is triggered (by a comment on a issue in GitHub), it 
+#    calls the endpoint http://[public-ip]:5000/createJira with json payload
+#    containing the issue and its data.
+#    This application create a Jira story iif the comment, that triggered 
+#    the action, contains "/jira".
+#
+# To use this application:
+#    Provide the required Jira project and Auth variable:
+#       JIRA_PROJECT_URL, JIRA_PROJECT_KEY, API_TOKEN, AUTH_EMAIL 
+#    Run the python scrips
+###########################################################################
+
 import json
 from logging.config import dictConfig
 
 import requests
 from flask import Flask, request
 from requests.auth import HTTPBasicAuth
+
+JIRA_PROJECT_URL=""
+JIRA_PROJECT_KEY=""
+
+# [TODO: add the following to env vars]
+API_TOKEN=""
+AUTH_EMAIL=""
 
 dictConfig({
     'version': 1,
@@ -161,14 +183,6 @@ def wrong_payload():
         mimetype='application/json'
     )
     return response
-
-
-JIRA_PROJECT_URL=""
-JIRA_PROJECT_KEY=""
-
-# [TODO: add to env vars]
-API_TOKEN=""
-AUTH_EMAIL=""
 
 if __name__ == '__main__':
     if JIRA_PROJECT_URL == "" or JIRA_PROJECT_KEY=="" or API_TOKEN=="" or AUTH_EMAIL =="":
